@@ -31,17 +31,17 @@ def createTables():
                   "province text) ")
         with open('pizza.csv', 'r') as pizzaTable:
                 data = csv.DictReader(pizzaTable)
-                toDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
+                toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
                          i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'],
                          i['province']) for i in data]
-        c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?,?,?,?);", toDB)
+        c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?,?,?,?);", toPizzaDB)
 
         # Create table 2 - Cities
         c.execute("CREATE TABLE cities (rank integer, city text, state text, population integer, growth real) ")
         with open('cities.csv', 'r') as cityTable:
             data = csv.DictReader(cityTable)
-            toDB = [(i['rank'], i['city'], i['state'], i['population'], i['growth']) for i in data]
-        c.executemany("INSERT INTO cities VALUES (?,?,?,?,?);", toDB)
+            toCityDB = [(i['rank'], i['city'], i['state'], i['population'], i['growth']) for i in data]
+        c.executemany("INSERT INTO cities VALUES (?,?,?,?,?);", toCityDB)
         conn.commit()
 
 
