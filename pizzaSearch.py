@@ -26,10 +26,14 @@ def createTables():
         c = conn.cursor()
 
         #Create table 1 - Pizzas
-        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, menusAmountMax real, menusAmountMin real, name text, postalCode integer, priceRangeMin integer, priceRangeMax integer, province text) ")
+        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, menusAmountMax real,"
+                  "menusAmountMin real, name text, postalCode integer, priceRangeMin integer, priceRangeMax integer,"
+                  "province text) ")
         with open('pizza.csv', 'r') as pizzaTable:
                 data = csv.DictReader(pizzaTable)
-                toDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'], i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'], i['province']) for i in data]
+                toDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
+                         i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'],
+                         i['province']) for i in data]
         c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?,?,?,?);", toDB)
 
         # Create table 2 - Cities
