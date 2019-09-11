@@ -6,18 +6,32 @@ import sqlite3, csv
 
 def main():
 
-    #continue = 1
+    keepGoing = "y"
 
     # Introduction to program
     print("Welcome to PizzaSearch3000")
     print("Please enter search query")
 
-    # Call database integration function
+    # # Call database integration function
     # createTables()
 
-    #while continue == 1
+    while keepGoing == "y":
         # Call search function
+        search()
+
         # Ask if user would like to search again
+        keepGoing = input("Would you like to search again? (y/n)")
+
+        # try:
+        #     keepGoing = input("Would you like to search again? (y/n)")
+        #     if keepGoing != "y" or keepGoing != "n":
+        #         raise ValueError
+        # except ValueError:
+        #     keepGoing = input("Please try again (y/n)")
+        # else:
+        #     print("I got here")
+
+
         # IF no, continue = 0
 
 def createTables():
@@ -30,10 +44,10 @@ def createTables():
                   "menusAmountMin real, name text, postalCode integer, priceRangeMin integer, priceRangeMax integer,"
                   "province text) ")
         with open('pizza.csv', 'r') as pizzaTable:
-                data = csv.DictReader(pizzaTable)
-                toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
-                         i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'],
-                         i['province']) for i in data]
+            data = csv.DictReader(pizzaTable)
+            toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
+                i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'],
+                i['province']) for i in data]
         c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?,?,?,?);", toPizzaDB)
 
         # Create table 2 - Cities
@@ -43,16 +57,16 @@ def createTables():
             toCityDB = [(i['rank'], i['city'], i['state'], i['population'], i['growth']) for i in data]
         c.executemany("INSERT INTO cities VALUES (?,?,?,?,?);", toCityDB)
         conn.commit()
+        conn.close()
 
 
 # conn = sqlite3.connect('pizzaCities.db')
 #         c = conn.cursor()
         
-    # Load CSVs into database tables
 
-def search(query):
+def search():
     # Receive sarch query and interact with database appropriately
-    x = 2
+    x = input("testing")
 
 
 main()
