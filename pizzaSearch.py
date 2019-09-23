@@ -4,6 +4,7 @@
 
 import sqlite3, csv
 
+
 def main():
 
     #continue = 1
@@ -19,6 +20,7 @@ def main():
         # Call search function
         # Ask if user would like to search again
         # IF no, continue = 0
+
 
 def createTables():
         #Create database
@@ -51,7 +53,7 @@ def createTables():
     # Load CSVs into database tables
 
 def search(query):
-    # Receive sarch query and interact with database appropriately
+    # Receive search query and interact with database appropriately
     x = 2
 
 
