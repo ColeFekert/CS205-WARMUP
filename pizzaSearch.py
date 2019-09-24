@@ -2,7 +2,7 @@
 # CS 205 - Warmup Project
 # Pizza Search tool
 
-import sqlite3, csv
+import sqlite3, csv,string
 
 def main():
 
@@ -66,7 +66,16 @@ def createTables():
 
 def search():
     # Receive sarch query and interact with database appropriately
-    x = input("testing")
-
+    c = sqlite3.connect('pizzaCities.db')
+    cur = c.cursor()
+    x = input("testing: ")
+    if x.startswith("population"):
+            value = x.partition('population ')[2]
+            cur.execute("SELECT population FROM cities WHERE city =?", (value,))
+            try:
+                    fetch = cur.fetchone()[0]
+                    print(fetch)
+            except:
+                    print("An exception has occured")
 
 main()
