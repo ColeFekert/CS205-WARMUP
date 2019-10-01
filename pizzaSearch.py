@@ -251,10 +251,16 @@ def parseQuery(query):
 
     return stringQuery
 
+def executeQuery(statement):
+    conn = sqlite3.connect('pizzaCities.db')
+    c = conn.cursor()
+    c.execute(statement)
+    fetch = c.fetchall
+    print(fetch)
+
 def search():
     # Receive search query and interact with database appropriately
-    c = sqlite3.connect('pizzaCities.db')
-    cur = c.cursor()
+    
 
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& GET INPUT FROM USER %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
 
@@ -265,15 +271,8 @@ def search():
 
     verifyQuery(query)
     theActualQuery = parseQuery(query)
+    executeQuery(theActualQuery)
 
-    # execute query
-    cur.execute(theActualQuery)
-    ## Not sure if the part below is needed
-    # try:
-    #     fetch = cur.fetchone()[0]
-    #     print(fetch)
-    # except:
-    #     print("An exception has occurred")
 
 
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
