@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Added a bunch of functions">
+    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pizzaSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/pizzaSearch.py" afterDir="false" />
     </list>
@@ -99,7 +99,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569615033680</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing">
+      <created>1569795338088</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1569795338088</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -117,6 +124,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Added a bunch of functions" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Added a bunch of functions" />
+    <MESSAGE value="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing" />
   </component>
 </project>

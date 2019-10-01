@@ -158,12 +158,14 @@ def createTables():
 #             return "in "
 #         else:
 #             inputNotApproved = True
-        
+
+# Iterate through each of the elements of the query and check that they are
+# as they should be.
 def verifyQuery(query):
     # What we're checking against
-    possibleQueryElements = ["cities", "pizza places", "postal code"]
+    possibleInitialQueryElements = ["cities", "pizza places", "postal code"]
     ignorableQueryElements = ["with", "in", "for"]
-    calculationQueryElements = ["price", "population", "cardinal direction"]
+    possibleQueryElements = ["price", "population", "cities", "pizza places", "postal code"]
     cardinalDirections = ["north", "south", "east", "west", "northwest", "southwest", "northeast", "southeast"]
 
     approved = False
@@ -172,22 +174,28 @@ def verifyQuery(query):
         query = input("Enter the query: ").split()
         # Where we iterate and check
         error = False
+
+        # Make sure the query begins correctly
+        if query[0] not in possibleInitialQueryElements:
+            error = True
+
         for i in range(len(query)):
-            if query[i] in possibleQueryElements or query[i] in calculationQueryElements:
-                if query[i] == "cardinal direction":
-                    if query[i + 1] not in cardinalDirections:
-                        error = True
+            if i == 0:
+                # Skip the first element, since its already been handled
+                continue
+            if query[i] in possibleQueryElements:
+                # Query element is approved, so continue to the next element
+                continue
             elif query[i] in ignorableQueryElements:
+                # Query element can be stripped out
                 query.remove(query[i])
                 error = False
             else:
+                # Query element was not approved
                 error = True
 
         if not error:
             approved = True
-
-    # Possible idea: Iterate through each of the elements of the query and check that they are
-    # as they should be. Then build the query after its been verified.
 
     return approved
 
@@ -196,11 +204,11 @@ def parseQuery(query):
     stringQuery = ""
 
     if query[0] == "cities":
-        stringQuery = "SELECT cities "
+        stringQuery = "SELECT city FROM cities "
     elif query[0] == "pizza places":
-        stringQuery = "SELECT pizza places "
+        stringQuery = "SELECT name FROM pizza "
     elif query[0] == "postal code":
-        stringQuery = "SELECT postal code "
+        stringQuery = "SELECT postalCode FROM pizza "
 
     for i in range(len(query)):
         if i == 0:
@@ -208,28 +216,40 @@ def parseQuery(query):
             continue
         else:
             if query[i] == "price":
-                if query[i + 1].isdigit():
-                    stringQuery += "WHERE price < " + str(query[i + 1])
+                prices = ['$', '$$', '$$$']
+
+                if query[i + 1] in prices:
+                    if query[i + 1] == '$':
+                        stringQuery += "WHERE price = $"
+                    elif query[i + 1] == '$$':
+                        stringQuery += "WHERE price = $$"
+                    elif query[i + 1] == '$$$':
+                        stringQuery += "WHERE price = $$$"
+                else:
+                    # User didn't enter a price value after price - which is needed
+                    # So we use a default value instead
+                    print("ERROR: User did not enter value after price. Using default value of $$.")
+                    stringQuery += "WHERE population = $$"
+
             elif query[i] == "population":
                 if query[i + 1].isdigit():
                     stringQuery += "WHERE population < " +str(query[i + 1])
-            elif query[i] == "cardinal direction":
-                if query[i + 1] == "north":
-                    stringQuery += "WHERE latitude > ??? AND WHERE longitude > ???"
-                elif query[i + 1] == "south":
-                    # do something else
-                elif query[i + 1] == "east":
-                    # do something else
-                elif query[i + 1] == "west":
-                    # do something else
-                elif query[i + 1] == "northeast":
-                    # do something else
-                elif query[i + 1] == "northwest":
-                    # do something else
-                elif query[i + 1] == "southeast":
-                    # do something else
-                elif query[i + 1] == "southwest":
-                    # do something else
+                else:
+                    # User didn't enter a number after population - which is needed
+                    # So we use a default value instead
+                    print("ERROR: User did not enter number after population. Using default value of 50,000.")
+                    stringQuery += "WHERE population < 50000"
+
+            elif query[i] == "postal code":
+                if query[i + 1].isdigit():
+                    stringQuery += "WHERE postalCode = " + str(query[i + 1])
+                else:
+                    # User didn't enter a number after population - which is needed
+                    # So we use a default value instead
+                    print("ERROR: User did not enter number after postal code. Using default value of 10001.")
+                    stringQuery += "WHERE postalCode = 10001"
+
+    return stringQuery
 
 def search():
     # Receive search query and interact with database appropriately
@@ -247,7 +267,13 @@ def search():
     theActualQuery = parseQuery(query)
 
     # execute query
-
+    cur.execute(theActualQuery)
+    ## Not sure if the part below is needed
+    # try:
+    #     fetch = cur.fetchone()[0]
+    #     print(fetch)
+    # except:
+    #     print("An exception has occurred")
 
 
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
