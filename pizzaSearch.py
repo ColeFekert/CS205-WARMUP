@@ -146,7 +146,7 @@ def parseQuery(query):
     elif query[0] == "pizza places":
         stringQuery = "SELECT name FROM pizzas "
     elif query[0] == "postal code":
-        stringQuery = "SELECT postalCode FROM pizza "
+        stringQuery = "SELECT postalCode FROM pizzas "
 
     for i in range(len(query)):
         if i == 0:
@@ -157,11 +157,11 @@ def parseQuery(query):
                 prices = ['$', '$$', '$$$']
                 if query[i + 1] in prices:
                     if query[i + 1] == '$':
-                        stringQuery += "WHERE price = $"
+                        stringQuery += "WHERE price = '$'"
                     elif query[i + 1] == '$$':
-                        stringQuery += "WHERE price = $$"
+                        stringQuery += "WHERE price = '$$'"
                     elif query[i + 1] == '$$$':
-                        stringQuery += "WHERE price = $$$"
+                        stringQuery += "WHERE price = '$$$'"
                 else:
                     # User didn't enter a price value after price - which is needed
                     # So we use a default value instead
@@ -207,3 +207,5 @@ def search():
 
 
 main()
+
+
