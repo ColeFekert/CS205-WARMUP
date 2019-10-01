@@ -193,12 +193,7 @@ def executeQuery(statement):
 def search():
     # Receive search query and interact with database appropriately
 
-
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& GET INPUT FROM USER %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-
-    continueQuery = True
-    queryApproved = False
-
+    # Initializes the array to store the query elements in
     query = []
 
     theActualQuery = parseQuery(verifyQuery(query))
