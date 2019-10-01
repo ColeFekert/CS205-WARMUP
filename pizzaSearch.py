@@ -65,8 +65,8 @@ def createTables():
 def verifyQuery(query):
     # What we're checking against
     possibleInitialQueryElements = ["cities", "pizza", "postal"]
-    ignorableQueryElements = ["with", "in", "for"]
-    possibleQueryElements = ["price", "population", "cities", "pizza places", "postal code"]
+    ignorableQueryElements = ["with", "in", "for", "places"]
+    possibleQueryElements = ["price", "population", "cities", "pizza", "postalcode"]
     # cardinalDirections = ["north", "south", "east", "west", "northwest", "southwest", "northeast", "southeast"]
     priceElements = ["$", "$$", "$$$"]
 
@@ -86,49 +86,56 @@ def verifyQuery(query):
         else:
             if query[0] == "pizza":
                 query[0] = "pizza places"
-                query.remove(query[1])
+                #query.remove(query[1])
             elif query[0] == "postal":
                 query[0] = "postal code"
-                query.remove(query[1])
+                #query.remove(query[1])
 
         print(query)
-
+        approvedQueryElements = []
         for i in range(len(query)):
             if i == 0:
                 # Skip the first element, since its already been handled
+                approvedQueryElements.append(query[i])
+                continue
+            if query[i] in possibleQueryElements:
+                # Query element is approved, so continue to the next element
+                approvedQueryElements.append(query[i])
                 continue
 
-            elif query[i - 1] == "price" or query[i - 1] == "population":
+            elif query[i] == "price" or query[i - 1] == "population":
+                 continue
+            if query[i] in ignorableQueryElements:
                 continue
-
-            elif query[i] in possibleQueryElements:
+            if query[i] in possibleQueryElements:
                 if query[i] == "pizza":
-                    query[i] = "pizza places"
-                    query.remove(query[i + 1])
+                    approvedQueryElements.append("pizza places")
+                    continue
                 elif query[i] == "postal":
-                    query[i] = "postal code"
-                    query.remove(query[i + 1])
+                    approvedQueryElements.append("postal code")
+                    continue
                 elif query[i] == "price":
                     if query[i + 1] not in priceElements:
                         error = True
+                    else:
+                        approvedQueryElements.append("price")
+                        approvedQueryElements.append(query[i+1])
+                        continue
                 elif query[i] == "population":
                     if not query[i + 1].isdigit():
                         error = True
-
+                    else:
+                        approvedQueryElements.append("population")
+                        approvedQueryElements.append(query[i + 1])
                 # Query element is approved, so continue to the next element
                 #continue
-            elif query[i] in ignorableQueryElements:
-                # Query element can be stripped out
-                query.remove(query[i])
-                error = False
             else:
-                # Query element was not approved
-                error = True
+                approvedQueryElements.append(query[i])
 
         if not error:
             approved = True
-
-    return query
+    print(approvedQueryElements)
+    return approvedQueryElements
 
 
 def parseQuery(query):
@@ -148,7 +155,6 @@ def parseQuery(query):
         else:
             if query[i] == "price":
                 prices = ['$', '$$', '$$$']
-
                 if query[i + 1] in prices:
                     if query[i + 1] == '$':
                         stringQuery += "WHERE price = $"
@@ -188,7 +194,6 @@ def executeQuery(statement):
     c.execute(statement)
     fetch = c.fetchall
     print(fetch)
-
 
 def search():
     # Receive search query and interact with database appropriately
