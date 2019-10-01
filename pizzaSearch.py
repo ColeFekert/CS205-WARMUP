@@ -60,132 +60,63 @@ def createTables():
         conn.close()
 
 
-# conn = sqlite3.connect('pizzaCities.db')
-#         c = conn.cursor()
-
-# def getSectionalQuery():
-#     sectionalQuery = ""
-#     inputNotApproved = True
-#
-#     while inputNotApproved:
-#         sectionalQuery = input("Enter sectional query: ")
-#
-#         sectionalQuery.lower()
-#
-#         if "pizza places" in sectionalQuery:
-#             return "pizza places "
-#         elif "cities" in sectionalQuery:
-#             return "cities "
-#         elif "postal code" in sectionalQuery:
-#             return "postal code "
-#         else:
-#             inputNotApproved = True
-#
-#
-# def getRestrictiveQuery():
-#     inputNotApproved = True
-#     restrictiveQuery = []
-#
-#     while inputNotApproved:
-#         restrictiveQuery[0] = input("Enter the category you want to narrow down: ")
-#
-#         secondInputNotApproved = True
-#         restrictiveQuery[0].lower()
-#
-#         if "price" in restrictiveQuery[0]:
-#             restrictiveQuery[0] = "price "
-#             while secondInputNotApproved:
-#                 restrictiveQuery[1] = input("Enter price ($,$$,$$$):  ")
-#
-#                 if restrictiveQuery[1].isalpha():
-#                     secondInputNotApproved = True
-#                 else:
-#                     secondInputNotApproved = False
-#             return restrictiveQuery
-#
-#         elif "population" in restrictiveQuery[0]:
-#             while secondInputNotApproved:
-#                 restrictiveQuery[1] = input("Enter max population: ")
-#
-#                 if restrictiveQuery[1].isalpha():
-#                     secondInputNotApproved = True
-#                 else:
-#                     secondInputNotApproved = False
-#             return restrictiveQuery
-#         elif "cardinal location" in restrictiveQuery[0]:
-#             while secondInputNotApproved:
-#                 restrictiveQuery[1] = input("Enter cardinal direction: ")
-#
-#                 restrictiveQuery[1].lower()
-#
-#                 if restrictiveQuery[1].isdecimal() or restrictiveQuery[1].isdigit():
-#                     secondInputNotApproved = True
-#                 elif "north" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "south" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "east" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "west" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "northeast" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "northwest" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "southeast" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 elif "southwest" in restrictiveQuery[1]:
-#                     secondInputNotApproved = False
-#                 else:
-#                     secondInputNotApproved = True
-#
-#             return restrictiveQuery
-#         else:
-#             inputNotApproved = True
-#
-#
-# def getModifierQuery():
-#     inputNotApproved = True
-#
-#     while inputNotApproved:
-#         modifierQuery = input("Enter modifier to previous Query: ")
-#
-#         modifierQuery.lower()
-#
-#         if "with" in modifierQuery:
-#             return "with "
-#         elif "in" in modifierQuery:
-#             return "in "
-#         else:
-#             inputNotApproved = True
-
 # Iterate through each of the elements of the query and check that they are
 # as they should be.
 def verifyQuery(query):
     # What we're checking against
-    possibleInitialQueryElements = ["cities", "pizza places", "postal code"]
+    possibleInitialQueryElements = ["cities", "pizza", "postal"]
     ignorableQueryElements = ["with", "in", "for"]
     possibleQueryElements = ["price", "population", "cities", "pizza places", "postal code"]
-    cardinalDirections = ["north", "south", "east", "west", "northwest", "southwest", "northeast", "southeast"]
+    # cardinalDirections = ["north", "south", "east", "west", "northwest", "southwest", "northeast", "southeast"]
+    priceElements = ["$", "$$", "$$$"]
 
     approved = False
 
     while not approved:
+        query.clear()
+        print()
         query = input("Enter the query: ").split()
+        # print(query)
         # Where we iterate and check
         error = False
 
         # Make sure the query begins correctly
         if query[0] not in possibleInitialQueryElements:
             error = True
+        else:
+            if query[0] == "pizza":
+                query[0] = "pizza places"
+                query.remove(query[1])
+            elif query[0] == "postal":
+                query[0] = "postal code"
+                query.remove(query[1])
+
+        print(query)
 
         for i in range(len(query)):
             if i == 0:
                 # Skip the first element, since its already been handled
                 continue
-            if query[i] in possibleQueryElements:
-                # Query element is approved, so continue to the next element
+
+            elif query[i - 1] == "price" or query[i - 1] == "population":
                 continue
+
+            elif query[i] in possibleQueryElements:
+                if query[i] == "pizza":
+                    query[i] = "pizza places"
+                    query.remove(query[i + 1])
+                elif query[i] == "postal":
+                    query[i] = "postal code"
+                    query.remove(query[i + 1])
+                elif query[i] == "price":
+                    if query[i + 1] not in priceElements:
+                        error = True
+                elif query[i] == "population":
+                    if not query[i + 1].isdigit():
+                        error = True
+
+                # Query element is approved, so continue to the next element
+                #continue
             elif query[i] in ignorableQueryElements:
                 # Query element can be stripped out
                 query.remove(query[i])
@@ -197,7 +128,7 @@ def verifyQuery(query):
         if not error:
             approved = True
 
-    return approved
+    return query
 
 
 def parseQuery(query):
@@ -263,8 +194,8 @@ def search():
 
     query = []
 
-    verifyQuery(query)
-    theActualQuery = parseQuery(query)
+    theActualQuery = parseQuery(verifyQuery(query))
+    print(theActualQuery)
 
     # execute query
     cur.execute(theActualQuery)
@@ -276,10 +207,30 @@ def search():
     #     print("An exception has occurred")
 
 
+
+    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& QUERY THE DATABASE %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
+    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& Older code %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
+
+    # print("Enter first part of query below:")
+    # print("Examples: 'pizza places', 'cities', or 'number of'")
+    # q1 = input("First part of query: ")
+    #
+    # if q1.startswith("population"):
+    #     value = q1.partition('population ')[2]
+    #     cur.execute("SELECT population FROM cities WHERE city =?", (value,))
+    #     try:
+    #         fetch = cur.fetchone()[0]
+    #         print(fetch)
+    #     except:
+    #         print("An exception has occurred")
+    #
+    # elif q1.startswith("number"):
+    #     value = q1.partition('number ')
+    #     # need the rest of query before executing
+
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& OLD BELOW %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
-
 
     # query = [getSectionalQuery(), getModifierQuery()]
 
@@ -325,25 +276,6 @@ def search():
     #             executionString += "FROM "
     #
     # cur.execute(executionString)
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& QUERY THE DATABASE %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& Older code %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-
-    print("Enter first part of query below:")
-    print("Examples: 'pizza places', 'cities', or 'number of'")
-    q1 = input("First part of query: ")
-
-    if q1.startswith("population"):
-        value = q1.partition('population ')[2]
-        cur.execute("SELECT population FROM cities WHERE city =?", (value,))
-        try:
-            fetch = cur.fetchone()[0]
-            print(fetch)
-        except:
-            print("An exception has occurred")
-
-    elif q1.startswith("number"):
-        value = q1.partition('number ')
-        # need the rest of query before executing
 
 
 main()

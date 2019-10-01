@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing">
+    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Finished parseQuery method">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pizzaSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/pizzaSearch.py" afterDir="false" />
     </list>
@@ -29,7 +29,8 @@
   <component name="ProjectId" id="1RWpccD70pkBxSEbtoMIZ6DaR0r" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Language Defaults" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -106,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569795338088</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- Finished parseQuery method">
+      <created>1569888606691</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1569888606691</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -125,6 +133,25 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Added a bunch of functions" />
     <MESSAGE value="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing" />
+    <MESSAGE value="- Finished parseQuery method" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Finished parseQuery method" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pizzaSearch.py</url>
+          <line>136</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
