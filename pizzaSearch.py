@@ -137,7 +137,7 @@ def parseQuery(query):
     if query[0] == "cities":
         stringQuery = "SELECT city FROM cities "
     elif query[0] == "pizza places":
-        stringQuery = "SELECT name FROM pizza "
+        stringQuery = "SELECT name FROM pizzas "
     elif query[0] == "postal code":
         stringQuery = "SELECT postalCode FROM pizza "
 
