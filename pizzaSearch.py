@@ -13,11 +13,11 @@ def main():
     print("Please enter search query")
 
     # # Call database integration function
-    # createTables()
+    createTables()
 
     while keepGoing == "y":
         # Call search function
-        search()
+        # search()
 
         # Ask if user would like to search again
         keepGoing = input("Would you like to search again? (y/n)")
@@ -40,15 +40,13 @@ def createTables():
         c = conn.cursor()
 
         #Create table 1 - Pizzas
-        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, menusAmountMax real,"
-                  "menusAmountMin real, name text, postalCode integer, priceRangeMin integer, priceRangeMax integer,"
-                  "province text) ")
+        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, name text,"
+                  " postalCode integer, price string, state string)")
         with open('pizza.csv', 'r') as pizzaTable:
             data = csv.DictReader(pizzaTable)
-            toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'], i['menus.amountMax'],
-                i['menus.amountMin'], i['name'], i['postalCode'], i['priceRangeMin'], i['priceRangeMax'],
-                i['province']) for i in data]
-        c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?,?,?,?);", toPizzaDB)
+            toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'],
+                i['name'], i['postalCode'], i['price'], i['state']) for i in data]
+        c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?);", toPizzaDB)
 
         # Create table 2 - Cities
         c.execute("CREATE TABLE cities (rank integer, city text, state text, population integer, growth real) ")
