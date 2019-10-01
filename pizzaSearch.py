@@ -182,10 +182,17 @@ def parseQuery(query):
 
     return stringQuery
 
+def executeQuery(statement):
+    conn = sqlite3.connect('pizzaCities.db')
+    c = conn.cursor()
+    c.execute(statement)
+    fetch = c.fetchall
+    print(fetch)
+
+
 def search():
     # Receive search query and interact with database appropriately
-    c = sqlite3.connect('pizzaCities.db')
-    cur = c.cursor()
+
 
     # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& GET INPUT FROM USER %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
 
@@ -196,86 +203,7 @@ def search():
 
     theActualQuery = parseQuery(verifyQuery(query))
     print(theActualQuery)
-
-    # execute query
-    cur.execute(theActualQuery)
-    ## Not sure if the part below is needed
-    # try:
-    #     fetch = cur.fetchone()[0]
-    #     print(fetch)
-    # except:
-    #     print("An exception has occurred")
-
-
-
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& QUERY THE DATABASE %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& Older code %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-
-    # print("Enter first part of query below:")
-    # print("Examples: 'pizza places', 'cities', or 'number of'")
-    # q1 = input("First part of query: ")
-    #
-    # if q1.startswith("population"):
-    #     value = q1.partition('population ')[2]
-    #     cur.execute("SELECT population FROM cities WHERE city =?", (value,))
-    #     try:
-    #         fetch = cur.fetchone()[0]
-    #         print(fetch)
-    #     except:
-    #         print("An exception has occurred")
-    #
-    # elif q1.startswith("number"):
-    #     value = q1.partition('number ')
-    #     # need the rest of query before executing
-
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& OLD BELOW %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-    # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&&%&%&%&%&%&
-
-    # query = [getSectionalQuery(), getModifierQuery()]
-
-    # if query[1] == "with ":
-    #     query.append(getRestrictiveQuery())
-    # else:
-    #     query.append(getSectionalQuery())
-    #
-    # cont = input("Add more to the query? (y/n) ")
-    # if cont == 'y':
-    #     continueQuery = True
-    # else:
-    #     continueQuery = False
-    #
-    # # possibly limit how many times we allow a user to extend a query?
-    # while continueQuery:
-    #     if query[len(query)] == "with ":
-    #         query.append(getRestrictiveQuery())
-    #         query.append(getModifierQuery())
-    #     else:
-    #         query.append(getSectionalQuery())
-    #         query.append(getModifierQuery())
-    #
-    # # %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%& BUILD QUERY %&%&%&%&%&%&%&%&%&%&%&%&%&%&%&%&
-    # # Need to add handling for 'number of'
-    # executionString = "SELECT "
-    # for i in range(len(query)):
-    #     if (i % 2 == 0):
-    #         if query[i - 1] == "with ":
-    #             # this means we are on a restrictive query
-    #             executionString += query[i][0]
-    #             executionString += "< "
-    #             executionString += query[i][1]
-    #
-    #         # this means we are on a sectional query
-    #         executionString += query[i]
-    #
-    #     else:
-    #         # this means we are on a modifier query
-    #         if query[i] == "with ":
-    #             executionString += "WHERE "
-    #         else:
-    #             executionString += "FROM "
-    #
-    # cur.execute(executionString)
+    executeQuery(theActualQuery)
 
 
 main()
