@@ -13,7 +13,7 @@ def main():
     print("Please enter search query")
 
     # # Call database integration function
-    #createTables()
+    # createTables()
 
     while keepGoing == "y":
         # Call search function
@@ -64,8 +64,8 @@ def createTables():
 def verifyQuery(query):
     # What we're checking against
     possibleInitialQueryElements = ["cities", "pizza", "postal"]
-    ignorableQueryElements = ["with", "in", "for", "places"]
-    possibleQueryElements = ["price", "population", "cities", "pizza", "postalcode"]
+    ignorableQueryElements = ["with", "in", "for", "places", "code", "place"]
+    possibleQueryElements = ["price", "population", "cities", "postalcode"]
     priceElements = ["$", "$$", "$$$"]
 
     approved = False
@@ -91,47 +91,82 @@ def verifyQuery(query):
 
         print(query)
         approvedQueryElements = []
-        for i in range(len(query)):
+
+        querySize = len(query)
+
+        for i in range(querySize):
             if i == 0:
                 # Skip the first element, since its already been handled
                 approvedQueryElements.append(query[i])
                 continue
-            if query[i] in possibleQueryElements:
-                # Query element is approved, so continue to the next element
+            # if query[i] in possibleQueryElements:
+            #     # Query element is approved, so continue to the next element
+            #     approvedQueryElements.append(query[i])
+            #     continue
+
+            elif query[i] == "price":
                 approvedQueryElements.append(query[i])
                 continue
 
-            elif query[i] == "price" or query[i - 1] == "population":
-                 continue
-            if query[i] in ignorableQueryElements:
-                continue
-            if query[i] in possibleQueryElements:
-                if query[i] == "pizza":
-                    approvedQueryElements.append("pizza places")
-                    continue
-                elif query[i] == "postal":
-                    approvedQueryElements.append("postal code")
-                    continue
-                elif query[i] == "price":
-                    if query[i + 1] not in priceElements:
-                        error = True
-                    else:
-                        approvedQueryElements.append("price")
-                        approvedQueryElements.append(query[i+1])
-                        continue
-                elif query[i] == "population":
-                    if not query[i + 1].isdigit():
-                        error = True
-                    else:
-                        approvedQueryElements.append("population")
-                        approvedQueryElements.append(query[i + 1])
-                # Query element is approved, so continue to the next element
-                #continue
-            else:
+            elif query[i] == "population":
                 approvedQueryElements.append(query[i])
+                continue
+
+            elif query[i] == "postal" or query[i].lower() == "postalcode":
+                approvedQueryElements.append("postal code")
+                continue
+
+            elif query[i] == "cities" or query[i] == "city":
+                approvedQueryElements.append("cities")
+                continue
+
+            elif query[i] in ignorableQueryElements:
+                continue
+
+            elif query[i] in priceElements:
+                if approvedQueryElements[-1] == "price":
+                    approvedQueryElements.append(query[i])
+                else:
+                    error = True
+
+            elif query[i].isdigit():
+                if approvedQueryElements[-1] == "population":
+                    approvedQueryElements.append(query[i])
+                elif approvedQueryElements[-1] == "postal code":
+                    if (len(query[i]) > 5 or len(query[i]) < 0):
+                        error = True
+                    else:
+                        approvedQueryElements.append(query[i])
+
+            # if query[i] in possibleQueryElements:
+            #     if query[i] == "pizza":
+            #         approvedQueryElements.append("pizza places")
+            #         continue
+            #     elif query[i] == "postal":
+            #         approvedQueryElements.append("postal code")
+            #         continue
+            #     elif query[i] == "price":
+            #         if query[i + 1] not in priceElements:
+            #             error = True
+            #         else:
+            #             approvedQueryElements.append("price")
+            #             approvedQueryElements.append(query[i+1])
+            #             continue
+            #     elif query[i] == "population":
+            #         if not query[i + 1].isdigit():
+            #             error = True
+            #         else:
+            #             approvedQueryElements.append("population")
+            #             approvedQueryElements.append(query[i + 1])
+            #     # Query element is approved, so continue to the next element
+            #     #continue
+            else:
+                error = True
+                # approvedQueryElements.append(query[i])
 
         if not error:
             approved = True
+
     print(approvedQueryElements)
     return approvedQueryElements
 
@@ -162,14 +197,16 @@ def parseQuery(query):
                         stringQuery += "WHERE price = '$$'"
                     elif query[i + 1] == '$$$':
                         stringQuery += "WHERE price = '$$$'"
-                
+
                 else:
                     # User didn't enter a price value after price - which is needed
                     # So we use a default value instead
                     print("ERROR: User did not enter value after price. Using default value of $$.")
-                    stringQuery += "WHERE population = $$"
+                    stringQuery += "WHERE price = '$$'"
 
             elif query[i] == "population":
+                if query[0] == "pizza places":
+                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city "
                 if query[i + 1].isdigit():
                     stringQuery += "WHERE population < " +str(query[i + 1])
                 else:
@@ -194,9 +231,18 @@ def executeQuery(statement):
     c = conn.cursor()
     c.execute(statement)
     fetch = c.fetchall()
+
+    dataSet = set()
+
     for row in fetch:
-         for x in row:
-             print(x)
+         for element in row:
+             dataSet.add(element)
+             # print(element)
+
+    dataSet.sort()
+
+    print(dataSet)
+
     c.close()
 
 def search():
