@@ -9,8 +9,13 @@ def main():
     keepGoing = "y"
 
     # Introduction to program
-    print("Welcome to PizzaSearch3000")
-    print("Please enter search query")
+    print("+==============================================+")
+    print("|         Welcome to Pizza Search 3000         |")
+    print("|               Brought to you by              |")
+    print("|    Nick Bouffard, Cole Fekert, Henry Rice    |")
+    print("|                      &                       |")
+    print("|                   Kyle Mac                   |")
+    print("+==============================================+")
 
     # # Call database integration function
     # createTables()
@@ -72,6 +77,49 @@ def verifyQuery(query):
 
     while not approved:
         query.clear()
+
+        print("+==============================================+")
+        print("|                 Query Format:                |")
+        print("|                                              |")
+        print("| Example Queries:                             |")
+        print("|       - pizza in city Dallas                 |")
+        print("|       - pizza in postal 11801                |")
+        print("|       - cities with price $$                 |")
+        print("|       - postal city Dallas                   |")
+        print("|                                              |")
+        print("| Syntax Considerations:                       |")
+        print("|       - postal code can be entered as        |")
+        print("|         postal/postal code.                  |")
+        print("|                                              |")
+        print("|       - Enter cities with no spaces and      |")
+        print("|         capitalized (camelCase).             |")
+        print("|                                              |")
+        print("|       - You do not have to have in/with/etc. |")
+        print("|         in your query.                       |")
+        print("|                                              |")
+        print("|       - pizza places can be written as pizza.|")
+        print("|                                              |")
+        print("|       - price has to be followed by $/$$/$$$.|")
+        print("|                                              |")
+        print("|       - population has to be followed by     |")
+        print("|         an integer.                          |")
+        print("|                                              |")
+        print("|       - postal code has to be followed by    |")
+        print("|         an integer that is 5 digits long.    |")
+        print("|                                              |")
+        print("| Rules:                                       |")
+        print("|       - Queries must start with one of the   |")
+        print("|         following: pizza, cities, postal.    |")
+        print("|                                              |")
+        print("|       - Queries can not be longer than 2     |")
+        print("|         selections, an example of a query    |")
+        print("|         that breaks this rule would be:      |")
+        print("|         'pizza population 40000 price $$'    |")
+        print("|         Because pizza, population, and price |")
+        print("|         are each selections.                 |")
+        print("|                                              |")
+        print("|                                              |")
+        print("+==============================================+")
         query = input("Enter the query: ").split()
         # print(query)
         # Where we iterate and check
@@ -88,7 +136,7 @@ def verifyQuery(query):
                 query[0] = "postal code"
                 #query.remove(query[1])
 
-        print(query)
+        #print(query)
         approvedQueryElements = []
 
         querySize = len(query)
@@ -193,7 +241,7 @@ def verifyQuery(query):
         if not error:
             approved = True
 
-    print(approvedQueryElements)
+    #print(approvedQueryElements)
     return approvedQueryElements
 
 
@@ -232,9 +280,9 @@ def parseQuery(query):
 
             elif query[i] == "population":
                 if query[0] == "pizza places":
-                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city "
+                    stringQuery += "INNER JOIN cities on cities.city = pizzas.city "
                 if query[i + 1].isdigit():
-                    stringQuery += "WHERE population < " +str(query[i + 1])
+                    stringQuery += "WHERE population < " +str(query[i + 1]) + " "
                 else:
                     # User didn't enter a number after population - which is needed
                     # So we use a default value instead
@@ -252,7 +300,7 @@ def parseQuery(query):
 
             elif query[i] == "cities" or query[i] == "city":
                 if len(query) <= (i + 1):
-                    stringQuery += "INNER JOIN cities on cities.city = pizzas.city WHERE cities.city = 'New York' "
+                    stringQuery += "INNER JOIN cities on cities.city = pizzas.city WHERE pizzas.city = 'New York' "
 
                 else:
                     stringQuery += "INNER JOIN cities on cities.city = pizzas.city WHERE pizzas.city = '" + str(query[i + 1]) + "'"
@@ -279,7 +327,7 @@ def executeQuery(statement):
 
     count = 1
     for element in dataSet:
-        print(str(count) + ": " + element)
+        print(str(count) + ": " + str(element))
         count += 1
     print("Returned " + str(count-1) + " results.")
 
@@ -292,7 +340,7 @@ def search():
     query = []
 
     theActualQuery = parseQuery(verifyQuery(query))
-    print(theActualQuery)
+    # print(theActualQuery)
     executeQuery(theActualQuery)
 
 
