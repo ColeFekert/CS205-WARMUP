@@ -49,7 +49,8 @@ def createTables():
         c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?);", toPizzaDB)
 
         # Create table 2 - Cities
-        c.execute("CREATE TABLE cities (rank integer, city text, state text, population integer, growth real) ")
+        c.execute("CREATE TABLE cities (rank integer, city text, state text, population integer, growth real," 
+        "FOREIGN KEY(city) REFERENCES cities (city))")
         with open('cities.csv', 'r') as cityTable:
             data = csv.DictReader(cityTable)
             toCityDB = [(i['rank'], i['city'], i['state'], i['population'], i['growth']) for i in data]
@@ -65,7 +66,6 @@ def verifyQuery(query):
     possibleInitialQueryElements = ["cities", "pizza", "postal"]
     ignorableQueryElements = ["with", "in", "for", "places"]
     possibleQueryElements = ["price", "population", "cities", "pizza", "postalcode"]
-    # cardinalDirections = ["north", "south", "east", "west", "northwest", "southwest", "northeast", "southeast"]
     priceElements = ["$", "$$", "$$$"]
 
     approved = False
@@ -140,7 +140,7 @@ def parseQuery(query):
     stringQuery = ""
 
     if query[0] == "cities":
-        stringQuery = "SELECT city FROM cities "
+        stringQuery = "SELECT cities.city FROM cities "
     elif query[0] == "pizza places":
         stringQuery = "SELECT name FROM pizzas "
     elif query[0] == "postal code":
@@ -152,6 +152,8 @@ def parseQuery(query):
             continue
         else:
             if query[i] == "price":
+                if query[0] == "cities":
+                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city "
                 prices = ['$', '$$', '$$$']
                 if query[i + 1] in prices:
                     if query[i + 1] == '$':
@@ -160,6 +162,7 @@ def parseQuery(query):
                         stringQuery += "WHERE price = '$$'"
                     elif query[i + 1] == '$$$':
                         stringQuery += "WHERE price = '$$$'"
+                
                 else:
                     # User didn't enter a price value after price - which is needed
                     # So we use a default value instead
@@ -189,12 +192,12 @@ def parseQuery(query):
 def executeQuery(statement):
     conn = sqlite3.connect('pizzaCities.db')
     c = conn.cursor()
-    print(statement)
     c.execute(statement)
     fetch = c.fetchall()
     for row in fetch:
-        for x in row:
-            print(x)
+         for x in row:
+             print(x)
+    c.close()
 
 def search():
     # Receive search query and interact with database appropriately
