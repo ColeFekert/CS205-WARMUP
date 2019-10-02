@@ -13,7 +13,7 @@ def main():
     print("Please enter search query")
 
     # # Call database integration function
-    # createTables()
+    #createTables()
 
     while keepGoing == "y":
         # Call search function
@@ -40,12 +40,12 @@ def createTables():
         c = conn.cursor()
 
         #Create table 1 - Pizzas
-        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, name text,"
+        c.execute("CREATE TABLE pizzas (address text, categories text, city text, keys text, pizzaName text,"
                   " postalCode integer, price string, state string)")
         with open('pizza.csv', 'r') as pizzaTable:
             data = csv.DictReader(pizzaTable)
             toPizzaDB = [(i['address'], i['categories'], i['city'], i['keys'],
-                i['name'], i['postalCode'], i['price'], i['state']) for i in data]
+                i['pizzaName'], i['postalCode'], i['price'], i['state']) for i in data]
         c.executemany("INSERT INTO pizzas VALUES (?,?,?,?,?,?,?,?);", toPizzaDB)
 
         # Create table 2 - Cities
@@ -137,29 +137,32 @@ def verifyQuery(query):
                     else:
                         approvedQueryElements.append(query[i])
 
-            elif query[i].isalpha():
-                if query[i - 1] == "cities":
-                    conn = sqlite3.connect('pizzaCities.db')
-                    c = conn.cursor()
-                    c.execute("SELECT cities.city FROM cities")
-                    fetch = c.fetchall()
+            elif query[i - 1] == "cities" or query[i - 1] == "city":
+                conn = sqlite3.connect('pizzaCities.db')
+                c = conn.cursor()
+                c.execute("SELECT city FROM cities")
+                fetch = c.fetchall()
 
-                    cities = set()
+                cities = set()
 
-                    for row in fetch:
-                        for city in row:
-                            cities.add(city)
+                for row in fetch:
+                    # print(row)
+                    for city in row:
+                        # print(city)
+                        cities.add(city)
 
-                    cityApproved = False
+                cityApproved = False
 
-                    for city in cities:
-                        if query[i] == city.lower():
-                            cityApproved = True
+                for city in cities:
+                    if query[i] == city:
+                        cityApproved = True
 
-                    if not cityApproved:
-                        error = True
-                    else:
-                        approvedQueryElements.append(query[i])
+                if cityApproved:
+                    approvedQueryElements.append(query[i])
+
+                else:
+                    error = True
+                continue
 
             # if query[i] in possibleQueryElements:
             #     if query[i] == "pizza":
@@ -200,7 +203,7 @@ def parseQuery(query):
     if query[0] == "cities":
         stringQuery = "SELECT cities.city FROM cities "
     elif query[0] == "pizza places":
-        stringQuery = "SELECT name FROM pizzas "
+        stringQuery = "SELECT pizzaName FROM pizzas "
     elif query[0] == "postal code":
         stringQuery = "SELECT postalCode FROM pizzas "
 
@@ -249,10 +252,10 @@ def parseQuery(query):
 
             elif query[i] == "cities" or query[i] == "city":
                 if len(query) <= (i + 1):
-                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city WHERE cities = 'New York' "
+                    stringQuery += "INNER JOIN cities on cities.city = pizzas.city WHERE cities.city = 'New York' "
 
                 else:
-                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city WHERE cities = '" + str(query[i + 1]) + "'"
+                    stringQuery += "INNER JOIN cities on cities.city = pizzas.city WHERE pizzas.city = '" + str(query[i + 1]) + "'"
 
 
 
@@ -278,7 +281,7 @@ def executeQuery(statement):
     for element in dataSet:
         print(str(count) + ": " + element)
         count += 1
-    print("Returned " + str(count) + " results.")
+    print("Returned " + str(count-1) + " results.")
 
     c.close()
 

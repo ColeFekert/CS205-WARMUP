@@ -1,4 +1,4 @@
-address,categories,city,keys,name,postalCode,price,state
+address,categories,city,keys,pizzaName,postalCode,price,state
 4203 E Kiehl Ave,"Pizza,Restaurant,American restaurants,Pizza Place,Restaurants",Sherwood,us/ar/sherwood/4203ekiehlave/-1051391616,Shotgun Dans Pizza,72120,$$,AR
 25 E Camelback Rd,"Pizza,Pizza Place,Restaurants",Phoenix,us/az/phoenix/25ecamelbackrd/-727422936,Sauce Pizza Wine,85012,$$,AZ
 3703 Paxton Ave,"Restaurant,Pizza Place,Restaurants",Cincinnati,us/oh/cincinnati/3703paxtonave/-619797122,Mios Pizzeria,45209,$$,OH
