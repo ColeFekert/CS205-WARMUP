@@ -18,7 +18,7 @@ def main():
     print("+==============================================+")
 
     # # Call database integration function
-    # createTables()
+    createTables()
 
     while keepGoing == "y":
         # Call search function
