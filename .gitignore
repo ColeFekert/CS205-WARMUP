@@ -5,3 +5,6 @@ workspace.xml
 *.xml
 *.xml
 *.xml
+*.iml
+*.iml
+*.xml
