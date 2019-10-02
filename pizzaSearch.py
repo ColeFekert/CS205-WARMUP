@@ -13,16 +13,16 @@ def main():
     print("Please enter search query")
 
     # # Call database integration function
-    createTables()
+    #createTables()
 
     while keepGoing == "y":
         # Call search function
-        # search()
+        search()
 
         # Ask if user would like to search again
         keepGoing = input("Would you like to search again? (y/n)")
 
-        # try:
+        # try:c
         #     keepGoing = input("Would you like to search again? (y/n)")
         #     if keepGoing != "y" or keepGoing != "n":
         #         raise ValueError
@@ -189,9 +189,12 @@ def parseQuery(query):
 def executeQuery(statement):
     conn = sqlite3.connect('pizzaCities.db')
     c = conn.cursor()
+    print(statement)
     c.execute(statement)
-    fetch = c.fetchall
-    print(fetch)
+    fetch = c.fetchall()
+    for row in fetch:
+        for x in row:
+            print(x)
 
 def search():
     # Receive search query and interact with database appropriately
