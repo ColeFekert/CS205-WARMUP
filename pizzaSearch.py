@@ -13,7 +13,7 @@ def main():
     print("Please enter search query")
 
     # # Call database integration function
-    createTables()
+    # createTables()
 
     while keepGoing == "y":
         # Call search function
