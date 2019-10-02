@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Tested verifyQuery and parseQuery methods and got them working">
+    <list default="true" id="6368d421-7074-469d-ab2f-ef495d4ec8aa" name="Default" comment="- Added comments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pizzaSearch.py" beforeDir="false" afterPath="$PROJECT_DIR$/pizzaSearch.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -169,7 +168,14 @@
       <option name="project" value="LOCAL" />
       <updated>1569952198518</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="- Added comments">
+      <created>1569953198595</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1569953198595</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -224,7 +230,8 @@
     <MESSAGE value="- Moved old methods up out of way&#10;- Fleshed out query verification&#10;- Began on query parsing" />
     <MESSAGE value="- Finished parseQuery method" />
     <MESSAGE value="- Tested verifyQuery and parseQuery methods and got them working" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Tested verifyQuery and parseQuery methods and got them working" />
+    <MESSAGE value="- Added comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Added comments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

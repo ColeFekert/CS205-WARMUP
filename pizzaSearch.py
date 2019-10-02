@@ -72,7 +72,6 @@ def verifyQuery(query):
 
     while not approved:
         query.clear()
-        print()
         query = input("Enter the query: ").split()
         # print(query)
         # Where we iterate and check
@@ -134,6 +133,30 @@ def verifyQuery(query):
                     approvedQueryElements.append(query[i])
                 elif approvedQueryElements[-1] == "postal code":
                     if (len(query[i]) > 5 or len(query[i]) < 0):
+                        error = True
+                    else:
+                        approvedQueryElements.append(query[i])
+
+            elif query[i].isalpha():
+                if query[i - 1] == "cities":
+                    conn = sqlite3.connect('pizzaCities.db')
+                    c = conn.cursor()
+                    c.execute("SELECT cities.city FROM cities")
+                    fetch = c.fetchall()
+
+                    cities = set()
+
+                    for row in fetch:
+                        for city in row:
+                            cities.add(city)
+
+                    cityApproved = False
+
+                    for city in cities:
+                        if query[i] == city.lower():
+                            cityApproved = True
+
+                    if not cityApproved:
                         error = True
                     else:
                         approvedQueryElements.append(query[i])
@@ -224,6 +247,16 @@ def parseQuery(query):
                     print("ERROR: User did not enter number after postal code. Using default value of 10001.")
                     stringQuery += "WHERE postalCode = 10001"
 
+            elif query[i] == "cities" or query[i] == "city":
+                if len(query) <= (i + 1):
+                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city WHERE cities = 'New York' "
+
+                else:
+                    stringQuery += "INNER JOIN pizzas on pizzas.city = cities.city WHERE cities = '" + str(query[i + 1]) + "'"
+
+
+
+
     return stringQuery
 
 def executeQuery(statement):
@@ -239,9 +272,13 @@ def executeQuery(statement):
              dataSet.add(element)
              # print(element)
 
-    dataSet.sort()
+    #dataSet.sort()
 
-    print(dataSet)
+    count = 1
+    for element in dataSet:
+        print(str(count) + ": " + element)
+        count += 1
+    print("Returned " + str(count) + " results.")
 
     c.close()
 
