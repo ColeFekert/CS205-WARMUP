@@ -9,8 +9,7 @@ def main():
     keepGoing = "y"
 
     # Introduction to program
-    print("Welcome to PizzaSearch3000")
-    print("Please enter search query")
+    print("Welcome to PizzaSearch3000\n")
 
     # # Call database integration function
     # createTables()
@@ -22,17 +21,6 @@ def main():
         # Ask if user would like to search again
         keepGoing = input("Would you like to search again? (y/n)")
 
-        # try:c
-        #     keepGoing = input("Would you like to search again? (y/n)")
-        #     if keepGoing != "y" or keepGoing != "n":
-        #         raise ValueError
-        # except ValueError:
-        #     keepGoing = input("Please try again (y/n)")
-        # else:
-        #     print("I got here")
-
-
-        # IF no, continue = 0
 
 def createTables():
         #Create database
@@ -59,8 +47,24 @@ def createTables():
         conn.close()
 
 
+def search():
+    # Receive search query and interact with database appropriately
+    query = input("Enter your query: ")
+    query = query.split()
+    print(query)
+
+    print(verifyQuery(query))
+    # actualQuery = parseQuery(verifyQuery(query))
+
+    # print(actualQuery)
+
+    # executeQuery(actualQuery)
+
+
 # Iterate through each of the elements of the query and check that they are
 # as they should be.
+
+
 def verifyQuery(query):
     # What we're checking against
     possibleInitialQueryElements = ["cities", "pizza", "postal"]
@@ -68,107 +72,122 @@ def verifyQuery(query):
     possibleQueryElements = ["price", "population", "cities", "postalcode"]
     priceElements = ["$", "$$", "$$$"]
 
-    approved = False
+    approvedQueryElements = []
 
-    while not approved:
-        query.clear()
-        print()
-        query = input("Enter the query: ").split()
-        # print(query)
-        # Where we iterate and check
-        error = False
-
-        # Make sure the query begins correctly
-        if query[0] not in possibleInitialQueryElements:
-            error = True
+    for item in query:
+        if item in possibleInitialQueryElements:
+            approvedQueryElements.append(item)
+            continue
+        elif item in ignorableQueryElements:
+            continue
+        elif item in possibleQueryElements:
+            approvedQueryElements.append(item)
+            continue
+        elif item in priceElements:
+            approvedQueryElements.append(item)
+            continue
         else:
-            if query[0] == "pizza":
-                query[0] = "pizza places"
-                #query.remove(query[1])
-            elif query[0] == "postal":
-                query[0] = "postal code"
-                #query.remove(query[1])
+            print("Could not parse search term: ", '"', item, '". Please try again.', sep='')
+            search()
 
-        print(query)
-        approvedQueryElements = []
-
-        querySize = len(query)
-
-        for i in range(querySize):
-            if i == 0:
-                # Skip the first element, since its already been handled
-                approvedQueryElements.append(query[i])
-                continue
-            # if query[i] in possibleQueryElements:
-            #     # Query element is approved, so continue to the next element
-            #     approvedQueryElements.append(query[i])
-            #     continue
-
-            elif query[i] == "price":
-                approvedQueryElements.append(query[i])
-                continue
-
-            elif query[i] == "population":
-                approvedQueryElements.append(query[i])
-                continue
-
-            elif query[i] == "postal" or query[i].lower() == "postalcode":
-                approvedQueryElements.append("postal code")
-                continue
-
-            elif query[i] == "cities" or query[i] == "city":
-                approvedQueryElements.append("cities")
-                continue
-
-            elif query[i] in ignorableQueryElements:
-                continue
-
-            elif query[i] in priceElements:
-                if approvedQueryElements[-1] == "price":
-                    approvedQueryElements.append(query[i])
-                else:
-                    error = True
-
-            elif query[i].isdigit():
-                if approvedQueryElements[-1] == "population":
-                    approvedQueryElements.append(query[i])
-                elif approvedQueryElements[-1] == "postal code":
-                    if (len(query[i]) > 5 or len(query[i]) < 0):
-                        error = True
-                    else:
-                        approvedQueryElements.append(query[i])
-
-            # if query[i] in possibleQueryElements:
-            #     if query[i] == "pizza":
-            #         approvedQueryElements.append("pizza places")
-            #         continue
-            #     elif query[i] == "postal":
-            #         approvedQueryElements.append("postal code")
-            #         continue
-            #     elif query[i] == "price":
-            #         if query[i + 1] not in priceElements:
-            #             error = True
-            #         else:
-            #             approvedQueryElements.append("price")
-            #             approvedQueryElements.append(query[i+1])
-            #             continue
-            #     elif query[i] == "population":
-            #         if not query[i + 1].isdigit():
-            #             error = True
-            #         else:
-            #             approvedQueryElements.append("population")
-            #             approvedQueryElements.append(query[i + 1])
-            #     # Query element is approved, so continue to the next element
-            #     #continue
-            else:
-                error = True
-                # approvedQueryElements.append(query[i])
-
-        if not error:
-            approved = True
-
-    print(approvedQueryElements)
     return approvedQueryElements
+
+    # approved = False
+    #
+    # while not approved:
+    #
+    #     # Make sure the query begins correctly
+    #     if query[0] not in possibleInitialQueryElements:
+    #         print("Error with " + query[0])
+    #         search()
+    #     else:
+    #         if query[0] == "pizza":
+    #             query[0] = "pizza places"
+    #             # query.remove(query[1])
+    #         elif query[0] == "postal":
+    #             query[0] = "postal code"
+    #             # query.remove(query[1])
+    #
+    #     print(query)
+    #     approvedQueryElements = []
+    #
+    #     querySize = len(query)
+    #
+    #     for i in range(querySize):
+    #         if i == 0:
+    #             # Skip the first element, since its already been handled
+    #             approvedQueryElements.append(query[i])
+    #             continue
+    #         # if query[i] in possibleQueryElements:
+    #         #     # Query element is approved, so continue to the next element
+    #         #     approvedQueryElements.append(query[i])
+    #         #     continue
+    #
+    #         elif query[i] == "price":
+    #             approvedQueryElements.append(query[i])
+    #             continue
+    #
+    #         elif query[i] == "population":
+    #             approvedQueryElements.append(query[i])
+    #             continue
+    #
+    #         elif query[i] == "postal" or query[i].lower() == "postalcode":
+    #             approvedQueryElements.append("postal code")
+    #             continue
+    #
+    #         elif query[i] == "cities" or query[i] == "city":
+    #             approvedQueryElements.append("cities")
+    #             continue
+    #
+    #         elif query[i] in ignorableQueryElements:
+    #             continue
+    #
+    #         elif query[i] in priceElements:
+    #             if approvedQueryElements[-1] == "price":
+    #                 approvedQueryElements.append(query[i])
+    #             else:
+    #                 error = True
+    #
+    #         elif query[i].isdigit():
+    #             if approvedQueryElements[-1] == "population":
+    #                 approvedQueryElements.append(query[i])
+    #             elif approvedQueryElements[-1] == "postal code":
+    #                 if (len(query[i]) > 5 or len(query[i]) < 0):
+    #                     error = True
+    #                 else:
+    #                     approvedQueryElements.append(query[i])
+    #
+    #         # if query[i] in possibleQueryElements:
+    #         #     if query[i] == "pizza":
+    #         #         approvedQueryElements.append("pizza places")
+    #         #         continue
+    #         #     elif query[i] == "postal":
+    #         #         approvedQueryElements.append("postal code")
+    #         #         continue
+    #         #     elif query[i] == "price":
+    #         #         if query[i + 1] not in priceElements:
+    #         #             error = True
+    #         #         else:
+    #         #             approvedQueryElements.append("price")
+    #         #             approvedQueryElements.append(query[i+1])
+    #         #             continue
+    #         #     elif query[i] == "population":
+    #         #         if not query[i + 1].isdigit():
+    #         #             error = True
+    #         #         else:
+    #         #             approvedQueryElements.append("population")
+    #         #             approvedQueryElements.append(query[i + 1])
+    #         #     # Query element is approved, so continue to the next element
+    #         #     #continue
+    #         else:
+    #             error = True
+    #             # approvedQueryElements.append(query[i])
+    #
+    #     if not error:
+    #         approved = True
+    #
+    # print(approvedQueryElements)
+    # return approvedQueryElements
 
 
 def parseQuery(query):
@@ -239,21 +258,9 @@ def executeQuery(statement):
              dataSet.add(element)
              # print(element)
 
-    dataSet.sort()
-
     print(dataSet)
 
     c.close()
-
-def search():
-    # Receive search query and interact with database appropriately
-
-    # Initializes the array to store the query elements in
-    query = []
-
-    theActualQuery = parseQuery(verifyQuery(query))
-    print(theActualQuery)
-    executeQuery(theActualQuery)
 
 
 main()
