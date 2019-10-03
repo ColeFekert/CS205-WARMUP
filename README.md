@@ -17,5 +17,5 @@ The foreign key consraint between our two tables is the city column in both tabl
 
 ## Instructions
 When running the program, an ascii menu will appear with detailed instructions on the syntax of queries as well as giving example queries to run.
-On initial run, please uncomment the createTables() function (around line 21) to initialize the database. After this first run please recomment the line
+
 
