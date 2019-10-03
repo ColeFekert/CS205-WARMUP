@@ -58,7 +58,7 @@ def createTables():
 def verifyQuery(query):
     # What we're checking against
     possibleInitialQueryElements = ["cities", "pizza", "postal"]
-    ignorableQueryElements = ["with", "in", "for", "places", "code", "place"]
+    ignorableQueryElements = ["with", "in", "for", "places", "code", "place", "codes"]
     possibleQueryElements = ["price", "population", "cities", "postalcode"]
     priceElements = ["$", "$$", "$$$"]
 
@@ -200,9 +200,14 @@ def verifyQuery(query):
             else:
                 error = True
                 # approvedQueryElements.append(query[i])
+        # print(approvedQueryElements)
+        if len(approvedQueryElements) > 3:
+            error = True
 
         if not error:
             approved = True
+
+
 
     return approvedQueryElements
 
