@@ -27,17 +27,6 @@ def main():
         # Ask if user would like to search again
         keepGoing = input("Would you like to search again? (y/n)")
 
-        # try:c
-        #     keepGoing = input("Would you like to search again? (y/n)")
-        #     if keepGoing != "y" or keepGoing != "n":
-        #         raise ValueError
-        # except ValueError:
-        #     keepGoing = input("Please try again (y/n)")
-        # else:
-        #     print("I got here")
-
-
-        # IF no, continue = 0
 
 def createTables():
         #Create database
@@ -131,10 +120,10 @@ def verifyQuery(query):
         else:
             if query[0] == "pizza":
                 query[0] = "pizza places"
-                #query.remove(query[1])
+
             elif query[0] == "postal":
                 query[0] = "postal code"
-                #query.remove(query[1])
+
 
         #print(query)
         approvedQueryElements = []
@@ -146,10 +135,7 @@ def verifyQuery(query):
                 # Skip the first element, since its already been handled
                 approvedQueryElements.append(query[i])
                 continue
-            # if query[i] in possibleQueryElements:
-            #     # Query element is approved, so continue to the next element
-            #     approvedQueryElements.append(query[i])
-            #     continue
+
 
             elif query[i] == "price":
                 approvedQueryElements.append(query[i])
@@ -194,9 +180,7 @@ def verifyQuery(query):
                 cities = set()
 
                 for row in fetch:
-                    # print(row)
                     for city in row:
-                        # print(city)
                         cities.add(city)
 
                 cityApproved = False
@@ -212,28 +196,7 @@ def verifyQuery(query):
                     error = True
                 continue
 
-            # if query[i] in possibleQueryElements:
-            #     if query[i] == "pizza":
-            #         approvedQueryElements.append("pizza places")
-            #         continue
-            #     elif query[i] == "postal":
-            #         approvedQueryElements.append("postal code")
-            #         continue
-            #     elif query[i] == "price":
-            #         if query[i + 1] not in priceElements:
-            #             error = True
-            #         else:
-            #             approvedQueryElements.append("price")
-            #             approvedQueryElements.append(query[i+1])
-            #             continue
-            #     elif query[i] == "population":
-            #         if not query[i + 1].isdigit():
-            #             error = True
-            #         else:
-            #             approvedQueryElements.append("population")
-            #             approvedQueryElements.append(query[i + 1])
-            #     # Query element is approved, so continue to the next element
-            #     #continue
+
             else:
                 error = True
                 # approvedQueryElements.append(query[i])
@@ -241,7 +204,6 @@ def verifyQuery(query):
         if not error:
             approved = True
 
-    #print(approvedQueryElements)
     return approvedQueryElements
 
 
@@ -311,6 +273,7 @@ def parseQuery(query):
     return stringQuery
 
 def executeQuery(statement):
+    #connects to data base and executes SQL statement
     conn = sqlite3.connect('pizzaCities.db')
     c = conn.cursor()
     c.execute(statement)
@@ -321,9 +284,6 @@ def executeQuery(statement):
     for row in fetch:
          for element in row:
              dataSet.add(element)
-             # print(element)
-
-    #dataSet.sort()
 
     count = 1
     for element in dataSet:
